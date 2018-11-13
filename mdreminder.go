@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 	"sync"
 )
@@ -14,25 +15,28 @@ import (
 // wg ensures all goroutines finish their task before main function ends.
 var wg sync.WaitGroup
 // TODO:
-var urlConn = make(chan string, 10)
+var urlConn = make(chan string, 100)
 
 // AccessUrl tests each url. If url can access, return code 200 with no error,
 // Otherwise return the error code (like 404) and error.
-func AccessUrl(url string) {
+func AccessUrl(url string) error {
 
 	client := &http.Client{}
 
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		log.Fatal("Error, maybe the url was moved to other place.", err)
+		fmt.Println("Url parse error: ", err)
+		return err
 	}
 
 	response, err := client.Do(request)
 	statusCode := response.StatusCode
 	if statusCode != 200 {
-		log.Fatal("Error occurs when execute \"NewRequest()\" on url, code is ", statusCode, err)
+		fmt.Println("Error occurs when execute \"NewRequest()\" on url, code is ", statusCode, url)
+		return err
 	}
-	fmt.Printf("Url %s is available.", url)
+	fmt.Printf("Url %s is available.\n", url)
+	return nil
 }
 
 // ScanDir scans the project folder to find the file (mainly *.md) which contains url
@@ -75,16 +79,21 @@ func ScanDir(dir string) {
 				if err != nil {
 					log.Fatal("Error occurs when read file by ReadFile:", err)
 				}
-				// prints the file content for test
-				fmt.Println(string(res))
+				// TODO: prints the file content for test
+				re := regexp.MustCompile(`(\w+):\/\/([^\/:]+)\/([^\s\)]*)*`)
+				set := re.FindAllString(string(res), -1)
+				for _, url := range set {
+					fmt.Println("Url is: ====================", url)
+					urlConn <- url
+					// TODO: test code should be removed later...
+					fmt.Println("urlConn <- url has been finished............")
+				}
 
 				// TODO: parse the content and extract the links
 				url := "https://github.com/AaronWharton"
-
-				//
 				urlConn <- url
-				// TODO: test code should be removed later...
 				fmt.Println("urlConn <- url has been finished............")
+
 			}(subDirOrFile)
 
 			wg.Wait()
