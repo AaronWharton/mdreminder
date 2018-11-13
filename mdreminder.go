@@ -21,6 +21,10 @@ var urlConn = make(chan string, 100)
 // Otherwise return the error code (like 404) and error.
 func AccessUrl(url string) error {
 
+	if url == "" {
+		// TODO:change output format
+		fmt.Println("This file does not contain any url!")
+	}
 	client := &http.Client{}
 
 	request, err := http.NewRequest("GET", url, nil)
@@ -82,17 +86,15 @@ func ScanDir(dir string) {
 				// TODO: prints the file content for test
 				re := regexp.MustCompile(`(\w+):\/\/([^\/:]+)\/([^\s\)]*)*`)
 				set := re.FindAllString(string(res), -1)
+				if len(set) == 0 {
+					urlConn <- ""
+				}
 				for _, url := range set {
 					fmt.Println("Url is: ====================", url)
 					urlConn <- url
 					// TODO: test code should be removed later...
 					fmt.Println("urlConn <- url has been finished............")
 				}
-
-				// TODO: parse the content and extract the links
-				url := "https://github.com/AaronWharton"
-				urlConn <- url
-				fmt.Println("urlConn <- url has been finished............")
 
 			}(subDirOrFile)
 
