@@ -11,7 +11,9 @@ import (
 )
 
 // global variable to hold all the urls
-var urls = make([]string, 0, 10)
+var urls = make([]string, 0, 30)
+// TODO:
+var ch = make(chan string, 30)
 
 // AccessUrl tests each url. If url can access, return code 200 with no error,
 // Otherwise return the error code (like 404) and error.
@@ -36,20 +38,25 @@ func AccessUrl(url string) (code int, err error) {
 // and store the file into []string, then using goroutine to open the file separately
 // to search the urls, all these urls will return finally.
 func ScanDir(dir string) []string {
-
 	fList, err := ioutil.ReadDir(dir)
 	if err != nil {
 		log.Fatal("Error occurs when read the directory", err)
 	}
 
+	// string of "/"
+	pathSep := string(os.PathSeparator)
+
 	for _, f := range fList {
+		// joint path name
+		subDirOrFile := dir + pathSep + f.Name()
 		if f.IsDir() {
-			ScanDir(f.Name())
+			ScanDir(subDirOrFile)
 		}
 
 		// ignore the letter case to judge the file type
 		if strings.ToLower(path.Ext(f.Name())) == ".md" {
 			//TODO: open other goroutine to search url in file
+			//TODO: sync data from goroutine before main function ends
 			go func(filename string) {
 				file, err := os.Open(filename)
 				if err != nil {
@@ -62,13 +69,18 @@ func ScanDir(dir string) []string {
 				if err != nil {
 					log.Fatal("Error occurs when read file by ReadFile:", err)
 				}
-				fmt.Println(res)
-			}(f.Name())
+				// prints the file content for test
+				fmt.Println(string(res))
+
+				// parse the content and extract the links
+
+			}(subDirOrFile)
 		}
 	}
 	return urls
 }
 
 func main() {
-
+	// test
+	ScanDir("/Users/aaron/Go/src/go-pro/src")
 }
