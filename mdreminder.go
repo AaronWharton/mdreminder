@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -17,13 +18,18 @@ var wg sync.WaitGroup
 // TODO:
 var urlConn = make(chan string, 100)
 
+// TODO：
+var count1, count2 = 0, 0
+
 // AccessUrl tests each url. If url can access, return code 200 with no error,
 // Otherwise return the error code (like 404) and error.
 func AccessUrl(url string) error {
+	fmt.Println("This url is :", url)
 
 	if url == "" {
 		// TODO:change output format
-		fmt.Println("This file does not contain any url!")
+		log.Println("This file does not contain any url!")
+		return errors.New("this file does not contain any url")
 	}
 	client := &http.Client{}
 
@@ -92,16 +98,18 @@ func ScanDir(dir string) {
 				for _, url := range set {
 					fmt.Println("Url is: ====================", url)
 					urlConn <- url
+					count1++
 					// TODO: test code should be removed later...
 					fmt.Println("urlConn <- url has been finished............")
 				}
 
 			}(subDirOrFile)
 
+			AccessUrl(<-urlConn)
+			count2++
 			wg.Wait()
 			// TODO: test code should be removed later...
 			fmt.Println("<-urlConn has been finished............")
-			AccessUrl(<-urlConn)
 		}
 	}
 }
@@ -109,4 +117,5 @@ func ScanDir(dir string) {
 func main() {
 	// test
 	ScanDir("/Users/aaron/Go/src/go-pro/src")
+	log.Println("program ends.", count1, count2)
 }
