@@ -15,11 +15,8 @@ import (
 
 // wg ensures all goroutines finish their task before main function ends.
 var wg sync.WaitGroup
-// TODO:
-var urlConn = make(chan string, 100)
 
-// TODO：
-var count1, count2 = 0, 0
+var urlConn = make(chan string, 100)
 
 // AccessUrl tests each url. If url can access, return code 200 with no error,
 // Otherwise return the error code (like 404) and error.
@@ -27,7 +24,6 @@ func AccessUrl(url string) error {
 	fmt.Println("This url is :", url)
 
 	if url == "" {
-		// TODO:change output format
 		log.Println("This file does not contain any url!")
 		return errors.New("this file does not contain any url")
 	}
@@ -71,8 +67,6 @@ func ScanDir(dir string) {
 
 		// ignore the letter case to judge the concrete type
 		if strings.ToLower(path.Ext(f.Name())) == ".md" {
-			//TODO: open other goroutine to search url in file
-			//TODO: sync data from goroutine before main function ends
 			// Use another goroutine to open file and search the links,
 			//
 			wg.Add(1)
@@ -89,27 +83,20 @@ func ScanDir(dir string) {
 				if err != nil {
 					log.Fatal("Error occurs when read file by ReadFile:", err)
 				}
-				// TODO: prints the file content for test
 				re := regexp.MustCompile(`(\w+):\/\/([^\/:]+)\/([^\s\)]*)*`)
 				set := re.FindAllString(string(res), -1)
 				if len(set) == 0 {
 					urlConn <- ""
 				}
+
 				for _, url := range set {
-					fmt.Println("Url is: ====================", url)
 					urlConn <- url
-					count1++
-					// TODO: test code should be removed later...
-					fmt.Println("urlConn <- url has been finished............")
 				}
 
 			}(subDirOrFile)
 
 			AccessUrl(<-urlConn)
-			count2++
 			wg.Wait()
-			// TODO: test code should be removed later...
-			fmt.Println("<-urlConn has been finished............")
 		}
 	}
 }
@@ -117,5 +104,4 @@ func ScanDir(dir string) {
 func main() {
 	// test
 	ScanDir("/Users/aaron/Go/src/go-pro/src")
-	log.Println("program ends.", count1, count2)
 }
