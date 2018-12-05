@@ -100,8 +100,3 @@ func ScanDir(dir string) {
 		}
 	}
 }
-
-func main() {
-	// test
-	ScanDir("/Users/aaron/Go/src/go-pro/src")
-}
