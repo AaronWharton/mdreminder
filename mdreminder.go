@@ -1,4 +1,4 @@
-package main
+package mdreminder
 
 import (
 	"errors"
