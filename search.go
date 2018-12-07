@@ -19,11 +19,12 @@ var urlList []string
 // ScanDir scans the project folder to find the file (mainly *.md) which contains url
 // and store the file into []string, then using goroutine to open the file separately
 // to search the urls, all these urls will return finally.
-func ScanDir(dir string) []string {
+func ScanDir(dir string) ([]string, error) {
 
 	fList, err := ioutil.ReadDir(dir)
 	if err != nil {
-		log.Fatal("Error occurs when read the directory", err)
+		log.Println("Error occurred when read the directory", err)
+		return nil, err
 	}
 
 	// string of "/"
@@ -66,5 +67,5 @@ func ScanDir(dir string) []string {
 			wg.Wait()
 		}
 	}
-	return urlList
+	return urlList, nil
 }
