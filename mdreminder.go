@@ -16,7 +16,7 @@ import (
 // wg ensures all goroutines finish their task before main function ends.
 var wg sync.WaitGroup
 
-var urlConn = make(chan string, 100)
+var urlList []string
 
 // AccessUrl tests each url. If url can access, return code 200 with no error,
 // Otherwise return the error code (like 404) and error.
@@ -36,9 +36,13 @@ func AccessUrl(url string) error {
 	}
 
 	response, err := client.Do(request)
-	statusCode := response.StatusCode
-	if statusCode != 200 {
-		fmt.Println("Error occurs when execute \"NewRequest()\" on url, code is ", statusCode, url)
+	// handle err like: `net/http: TLS handshake timeout` etc.
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if response.StatusCode != 200 {
+		fmt.Println("Error occurs when execute \"NewRequest()\" on url, code is ", response.StatusCode, url)
 		return err
 	}
 	fmt.Printf("Url %s is available.\n", url)
@@ -48,7 +52,7 @@ func AccessUrl(url string) error {
 // ScanDir scans the project folder to find the file (mainly *.md) which contains url
 // and store the file into []string, then using goroutine to open the file separately
 // to search the urls, all these urls will return finally.
-func ScanDir(dir string) {
+func ScanDir(dir string) []string {
 
 	fList, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -86,17 +90,17 @@ func ScanDir(dir string) {
 				re := regexp.MustCompile(`(\w+):\/\/([^\/:]+)\/([^\s\)]*)*`)
 				set := re.FindAllString(string(res), -1)
 				if len(set) == 0 {
-					urlConn <- ""
+					urlList = append(urlList, "")
 				}
 
 				for _, url := range set {
-					urlConn <- url
+					urlList = append(urlList, url)
 				}
 
 			}(subDirOrFile)
 
-			AccessUrl(<-urlConn)
 			wg.Wait()
 		}
 	}
+	return urlList
 }
