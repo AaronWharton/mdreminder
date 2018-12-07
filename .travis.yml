@@ -1,0 +1,12 @@
+language: go
+sudo: false
+
+notifications:
+  email:
+    recipients:
+      - aircitybruno@gmail.com
+    on_success: change
+    on_failure: always
+
+go:
+  - 1.11.2  # version 1.11.2 is OK.
