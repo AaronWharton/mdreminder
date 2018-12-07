@@ -23,7 +23,6 @@ func ScanDir(dir string) ([]string, error) {
 
 	fList, err := ioutil.ReadDir(dir)
 	if err != nil {
-		log.Println("Error occurred when read the directory", err)
 		return nil, err
 	}
 
@@ -34,7 +33,7 @@ func ScanDir(dir string) ([]string, error) {
 		// joint path name
 		subDirOrFile := dir + pathSep + f.Name()
 		if f.IsDir() {
-			ScanDir(subDirOrFile)
+			_, _ = ScanDir(subDirOrFile)
 		}
 
 		// ignore the letter case to judge the concrete type
