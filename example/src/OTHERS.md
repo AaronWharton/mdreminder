@@ -10,6 +10,6 @@ You can return the previous directory by clicking [here](https://github.com/Aaro
 
 
 
-dssd [here](https://github.com/AaronWharton/mdreminder)
+test [here](https://github.com/AaronWharton/mdreminder)
 
-fsdd [here](https://github.com/AaronWharton/)
+test [here](https://github.com/AaronWharton/)
