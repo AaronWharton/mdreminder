@@ -1,7 +1,7 @@
-// Github: https://github.com/AaronWharton/mdreminder
-
-// mdreminder is a project that detects whether urls in projects'
+// Package mdreminder detects whether urls in projects'
 // instructions(e.g. *.md files) are valid.
+//
+// You can view details on Github: https://github.com/AaronWharton/mdreminder
 //
 // It is intended to automatically find the invalid links in files and
 // inform user to correct the url. When you migrate your project, the
