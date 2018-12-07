@@ -26,11 +26,11 @@ func TestScanDir(t *testing.T) {
 		fmt.Printf("Test for ScanDir succeed! Directory path is: ???\n")
 	}
 
-	// access root directory `/`, it may take a long time.
+	// access root directory `/Users`, it may fail because of permission denied.
 	// Maybe you can choose other directory to test.
-	if _, err := ScanDir("/"); err != nil {
-		t.Errorf("Test for ScanDir failed! Directory path is: /\n")
+	if _, err := ScanDir("/Users"); err != nil {
+		t.Errorf("Test for ScanDir failed! Directory path is: /Users\n")
 	} else {
-		fmt.Printf("Test for ScanDir succeed! Directory path is: /\n")
+		fmt.Printf("Test for ScanDir succeed! Directory path is: /Users\n")
 	}
 }
