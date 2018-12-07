@@ -1,12 +1,17 @@
 language: go
 sudo: false
-
 notifications:
   email:
     recipients:
       - aircitybruno@gmail.com
     on_success: change
     on_failure: always
-
 go:
-  - 1.11.2  # version 1.11.2 is OK.
+  - 1.11.2
+
+script:
+  - go test -v -covermode=count -coverprofile=coverage.out
+  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+
+dd:
+  secure: gfAn2O2UUw3syvIKLxUzIPbKiwpwRFi7e1qjr6Ws7Hb0IjnVJOy1RfQKKsQk8KQrN6hde8tiZmMjzRie8plfy77DTAN155uF36xZt5g9BgmfYtRRh37PPnRP1p03WNGdV4Ug5CkF2YJBe82Prl59Poo2e3acTHxwX7iGiw0vzEPFwQ29ebtgE7jk/ucVlnIiC8olUFfFshTbcVZ+Zta2lBJqvJbD7B1LJ/m3P6N2c0uzgvakKv5iFhL9aOJ4jSiVzgr2kHw+qqJVx5wI6g0V6J1W0RGiKDW/293SaQv8a8t1v+hQY576GuS23tS5UDl4C6kdx35pq8SVlEaXR8kAmrIXK9O7o0gy5HIGijhuZpxZ8ltJSd3poX7mZUjSGA7mUjdR4SGgLlvBskiF5WoxKxjrfasKQOrYLMSl+s/YpxZhiNVPUe+vu9+2dOEPqJrRWnOdKZNBo+dltWqjzQnYPcwbyBI7eSD1cLE8jm5GYvQdlFw6CsDduh/8cyrNq5ZIEc6BdGB/4FvHKZDKjMEO3Atb7NOmd7T3dszEtXOGIQYLOJ5G9xsAXOn7lsidhdSZDA4xMbrqkMRpbOFv8Vj4IJYqG+Zt/0n4nkJDpgSalRDIlWyESE4klxHejBgGW4/qLLhXhy3V+Qz6jyN9e6RU88FY4bV0JMTAg1Jx1IABjTc=
