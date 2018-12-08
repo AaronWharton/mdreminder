@@ -11,14 +11,20 @@ Have you ever been bothered by plenty of invalid url links in the porject especi
 
 ## Usage
 - Go get it:
-```go
-go get -u github.com/AaronWharton/mdreminder
-```
+  ```go
+  go get -u github.com/AaronWharton/mdreminder
+  ```
 
 - Run it:
-```go
-mdreminder.ExecuteByPath("/Users")  // you can choose the path you want to detect
-```
+  ```go
+  package main
+  
+  import "github.com/AaronWharton/mdreminder"
+  
+  func main() {
+	  mdreminder.ExecuteByPath("/Users")  // you can choose the path you want to detect, note some directories may need access permission
+  }
+  ```
 
 - See the result in the ouput, you can see the example [here](https://github.com/AaronWharton/mdreminder/tree/master/_example).
 
