@@ -1,6 +1,6 @@
 package main
 
-import "mdreminder"
+import "github.com/AaronWharton/mdreminder"
 
 func main() {
 	mdreminder.ExecuteByPath("/Users/aaron/go/src/mdreminder")
