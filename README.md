@@ -4,18 +4,19 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/AaronWharton/mdreminder)](https://goreportcard.com/report/github.com/AaronWharton/mdreminder)
 [![codecov](https://codecov.io/gh/AaronWharton/mdreminder/branch/master/graph/badge.svg)](https://codecov.io/gh/AaronWharton/mdreminder)
 ![DUB](https://img.shields.io/dub/l/vibe-d.svg)
+[![Coverage Status](https://coveralls.io/repos/github/AaronWharton/mdreminder/badge.svg)](https://coveralls.io/github/AaronWharton/mdreminder)
 
 ## Introduction
 
 Have you ever been bothered by plenty of invalid url links in the porject especially when you change the project structure, which contains several `*.md` files that contain many links? mdreminder is exactly the project for detecting invalid links in `*.md` files at one time, which is lightweight and user-friendly.
 
 ## Usage
-- Go get it:
+**First** you should `go get` it:
   ```go
   go get -u github.com/AaronWharton/mdreminder
   ```
 
-- Run it:
+**Then** just run it by coding like this:
   ```go
   package main
   
@@ -26,7 +27,7 @@ Have you ever been bothered by plenty of invalid url links in the porject especi
   }
   ```
 
-- See the result in the ouput, you can see the example [here](https://github.com/AaronWharton/mdreminder/tree/master/_example).
+**Finally** see the result in the ouput, you can see the example [here](https://github.com/AaronWharton/mdreminder/tree/master/_example).
 
 ## Contribute
 Project now is under developping, any [pull request](https://github.com/AaronWharton/mdreminder/pulls) is welcome! If you have any question you can new [issue](https://github.com/AaronWharton/mdreminder/issues).
