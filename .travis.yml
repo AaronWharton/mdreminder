@@ -3,6 +3,11 @@ sudo: false
 
 go:
   - 1.11.2
+  
+before_install:
+  - go get github.com/mattn/goveralls
+script:
+  - $GOPATH/bin/goveralls -service=travis-ci
 
 # Codecov
 after_success:
